@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const express = require('express');
 // Import and require mysql2
 const mysql = require('mysql2');
+const api = require('./server');
 
 /* WHEN I start the application
 THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role */
@@ -13,12 +14,12 @@ function optionPrompt() {
             type: 'list',
             name: 'menu',
             message: "How would you like to proceed?",
-            choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Department", "Add a Role", "Add an Employee", "Update an Employee Role", "Quit"];
+            choices: ["View All Departments", "View All Roles", "View All Employees", "Add a Department", "Add a Role", "Add an Employee", "Update an Employee Role", "Quit"]
         }
 
     ])
-    .then((answers) => {
-        switch(DataTransfer.menu) {
+    .then((data) => {
+        switch(data.menu) {
             case "View All Departments":
                 viewDepartments();
                 break;
@@ -50,6 +51,7 @@ function optionPrompt() {
 THEN I am presented with a formatted table showing department names and department ids */
 function viewDepartments() {
     console.log("viewDepartments()");
+    api.getDepartments();
     optionPrompt();
 }
 
