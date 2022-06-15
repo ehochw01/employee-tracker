@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-// Import and require mysql2
 const mysql = require('mysql2');
 const api = require('./queries');
 const res = require('express/lib/response');
@@ -93,7 +92,6 @@ function addDepartmentInq() {
     ])
     .then((data) => {
         api.addDept(data.department, (results) => {
-            console.table(results);
             optionPrompt();
         });
     });

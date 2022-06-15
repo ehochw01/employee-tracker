@@ -58,8 +58,6 @@ function addRole (title, salary, department_id, cb) {
         if (err) {
 			console.log(err);
 		}
-		console.log(results);
-		// console.log(fields);
 		cb(results);
     });
 }
