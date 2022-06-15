@@ -150,11 +150,17 @@ function addRoleInq() {
 THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database */
 function addEmployeeInq() {
     console.log("addEmployeeInq()");
+    api.getRoles((roles_results) => {
+        const roleNames = roles_results.map(role => role.title);
+        api.getEmployees((emp_results) => {
+            const emp_names = emp_results.map(employee => employee.first_name + " " + employee.last_name);
+            console.table(emp_names);
+        });
+    });
     // What is the employee's first name?
     // What is the employee's last name?
     // What is the employee's role? Must get a list of roles
     // Who is the employee's manager? Must get a list of Employees
-    optionPrompt();
 }
 
 /* WHEN I choose to update an employee role
