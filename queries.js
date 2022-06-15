@@ -82,6 +82,18 @@ function addEmployee (first_name, last_name, role_id, manager_id, cb) {
     });
 }
 
+function updateRole(employee_id, role_id, cb) {
+	return db.query(`Update employees SET role_id = ${role_id} WHERE id = ${employee_id}`, function(err, results, fields) {
+        if (err) {
+			console.log(err);
+		}
+		console.log(results);
+		// console.log(fields);
+		cb(results);
+    });
+}
+
+
 
 module.exports = {
     getDepartments,
@@ -89,5 +101,6 @@ module.exports = {
 	getEmployees,
 	addDept,
 	addRole,
-	addEmployee
+	addEmployee,
+	updateRole
 }

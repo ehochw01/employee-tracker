@@ -209,9 +209,45 @@ function addEmployeeInq() {
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database */
 function updateEmployeeRole() {
     console.log("updateEmployeeRole()");
-    // Which employee's role do you want to update? Must get a list of employees
-    // Which role do you want to assign the selected employee? Must get a list of roles.
-    optionPrompt();
+    api.getEmployees((emp_results) => {
+        const emp_names = emp_results.map(employee => employee.Name);
+        api.getRoles((roles_results) => {
+            const roleNames = roles_results.map(role => role.title);
+            inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    name: 'employee',
+                    message: "Which employee's role do you want to update?",
+                    choices: emp_names
+                },
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: "Which role do you want to assign the selected employee?",
+                    choices: roleNames
+                }
+    
+            ])
+            .then((data) => {
+                let chosenEmp = null;
+                for (let i=0; i < emp_results.length; i++) {
+                    if(data.employee == emp_results[i].Name) {
+                        chosenEmp = emp_results[i].id;
+                    }
+                }
+                let chosenRole = null;
+                for(let i=0; i < roles_results.length; i++) {
+                    if (roles_results[i].title == data.role) {
+                        chosenRole = roles_results[i].id;
+                    }
+                }
+                api.updateRole(chosenEmp, chosenRole,(results) => {
+                    optionPrompt();
+                });
+            });
+        });
+    });
 }
 
 function init() {
