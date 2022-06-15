@@ -3,6 +3,7 @@ const cTable = require('console.table');
 // Import and require mysql2
 const mysql = require('mysql2');
 const api = require('./queries');
+const res = require('express/lib/response');
 
 /* WHEN I start the application
 THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role */
@@ -106,24 +107,42 @@ function addDepartmentInq() {
 THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database */
 function addRoleInq() {
     console.log("addRoleInq()");
-    inquirer
-    .prompt([
-        {
-            type: 'input',
-            name: 'name',
-            message: "What is the name of the role?",
-        },
-        {
-            type: 'input',
-            name: 'salary',
-            message: "What is the salary of the role?",
-        },
-        // What department does the Role belong to? (must get a list of departments)
+    api.getDepartments((results) => {
+        // console.log(results);    
+        const depNames = results.map(department => department.name)
+        inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: "What is the name of the role?",
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: "What is the salary of the role?",
+            },
+            // (must get a list of departments)
+            {
+                type: 'list',
+                name: 'department',
+                message: "What department does the Role belong to? ",
+                choices: depNames
+            }
 
-    ])
-    .then((data) => {
-        console.log(data.department);
-        optionPrompt();
+        ])
+        .then((data) => {
+            let chosenDepartment = null;
+            for(let i=0; i < results.length; i++) {
+                if (results[i].name == data.department) {
+                    chosenDepartment = results[i].id;
+                }
+            }
+            api.addRole(data.name, data.salary, chosenDepartment, (results) => {
+                console.table(results);
+                optionPrompt();
+            });
+        });
     });
 }
 

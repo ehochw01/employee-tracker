@@ -36,7 +36,7 @@ function getRoles(cb) {
 }
 
 function getEmployees(cb) {
-	return db.query(`SELECT e.id, e.first_name, e.last_name, roles.title, departments.name, roles.salary, m.manager_id
+	return db.query(`SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.name, roles.salary, employees.manager_id
 	FROM departments JOIN roles ON departments.id = roles.department_id JOIN employees ON roles.id = employees.role_id
 	ORDER BY employees.id ASC`, function(err, results, fields) {
 		if (err) {
@@ -59,9 +59,21 @@ function addDept(name, cb) {
     });
 }
 
+function addRole (title, salary, department_id, cb) {
+	return db.query(`INSERT INTO roles(title, salary, department_id) VALUES ('${title}', ${salary}, ${department_id});`, function(err, results, fields) {
+        if (err) {
+			console.log(err);
+		}
+		console.log(results);
+		// console.log(fields);
+		cb(results);
+    });
+}
+
 module.exports = {
     getDepartments,
 	getRoles,
 	getEmployees,
-	addDept
+	addDept,
+	addRole
 }
