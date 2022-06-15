@@ -9,7 +9,7 @@ const db = mysql.createConnection(
       host: 'localhost',
       // MySQL username,
       user: 'root',
-      // TODO: Add MySQL password
+      // Add MySQL password
       password: '',
       database: 'employee_db'
     },
@@ -36,9 +36,9 @@ function getRoles(cb) {
 }
 
 function getEmployees(cb) {
-	return db.query(`SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.name, roles.salary, employees.manager_id
+	return db.query(`SELECT employees.id, CONCAT(employees.first_name, ' ', employees.last_name) AS Name, roles.title AS Role, departments.name AS Department, roles.salary AS Salary, employees.manager_id AS "Manager ID"
 	FROM departments JOIN roles ON departments.id = roles.department_id JOIN employees ON roles.id = employees.role_id
-	ORDER BY employees.id ASC`, function(err, results, fields) {
+	ORDER BY employees.id ASC;`, function(err, results, fields) {
 		if (err) {
 			console.log(err);
 		}
@@ -70,10 +70,24 @@ function addRole (title, salary, department_id, cb) {
     });
 }
 
+function addEmployee (first_name, last_name, role_id, manager_id, cb) {
+	return db.query(`INSERT INTO employees(first_name, last_name, role_id, manager_id) 
+	VALUES ('${first_name}', '${last_name}', ${role_id}, ${manager_id});`, function(err, results, fields) {
+        if (err) {
+			console.log(err);
+		}
+		console.log(results);
+		// console.log(fields);
+		cb(results);
+    });
+}
+
+
 module.exports = {
     getDepartments,
 	getRoles,
 	getEmployees,
 	addDept,
-	addRole
+	addRole,
+	addEmployee
 }

@@ -139,7 +139,6 @@ function addRoleInq() {
                 }
             }
             api.addRole(data.name, data.salary, chosenDepartment, (results) => {
-                console.table(results);
                 optionPrompt();
             });
         });
@@ -153,14 +152,57 @@ function addEmployeeInq() {
     api.getRoles((roles_results) => {
         const roleNames = roles_results.map(role => role.title);
         api.getEmployees((emp_results) => {
-            const emp_names = emp_results.map(employee => employee.first_name + " " + employee.last_name);
-            console.table(emp_names);
+            const emp_names = emp_results.map(employee => employee.Name);
+            emp_names.unshift("None");
+            inquirer
+            .prompt([
+                {
+                    type: 'input',
+                    name: 'fn',
+                    message: "What is the employee's first name?",
+                },
+                {
+                    type: 'input',
+                    name: 'ln',
+                    message: "What is the employee's last name?",
+                },
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: "What is the employee's role?",
+                    choices: roleNames
+                },
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: "Who is the employee's manager?",
+                    choices: emp_names
+                }
+    
+            ])
+            .then((data) => {
+                let chosenRole = null;
+                for(let i=0; i < roles_results.length; i++) {
+                    if (roles_results[i].title == data.role) {
+                        chosenRole = roles_results[i].id;
+                    }
+                }
+                let chosenManager = null;
+                if (data.manager != "None") {
+                    for (let i=0; i < emp_results.length; i++) {
+                        if(data.manager == emp_results[i].Name) {
+                            chosenManager = emp_results[i].id;
+                        }
+                    }
+                }
+                console.log("chosenRole: " + chosenRole);
+                console.log("chosenManager: " + chosenManager);
+                api.addEmployee(data.fn, data.ln, chosenRole, chosenManager, (results) => {
+                    optionPrompt();
+                });
+            });
         });
     });
-    // What is the employee's first name?
-    // What is the employee's last name?
-    // What is the employee's role? Must get a list of roles
-    // Who is the employee's manager? Must get a list of Employees
 }
 
 /* WHEN I choose to update an employee role
