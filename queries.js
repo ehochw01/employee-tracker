@@ -13,7 +13,7 @@ const db = mysql.createConnection(
       password: '',
       database: 'employee_db'
     },
-    console.log(`Connected to the employee_db database.`)
+    console.log(`Connected to the employee_db database.\n`)
   );
   
 function getDepartments(cb) {
@@ -29,8 +29,6 @@ function getRoles(cb) {
 		if (err) {
 			console.log(err);
 		}
-		// console.log(results);
-		// console.log(fields);
 		cb(results);
 	});
 }
@@ -42,8 +40,6 @@ function getEmployees(cb) {
 		if (err) {
 			console.log(err);
 		}
-		// console.log(results);
-		// console.log(fields);
 		cb(results);
 	});
 }
@@ -53,8 +49,6 @@ function addDept(name, cb) {
         if (err) {
 			console.log(err);
 		}
-		console.log(results);
-		// console.log(fields);
 		cb(results);
     });
 }
@@ -76,8 +70,6 @@ function addEmployee (first_name, last_name, role_id, manager_id, cb) {
         if (err) {
 			console.log(err);
 		}
-		console.log(results);
-		// console.log(fields);
 		cb(results);
     });
 }
@@ -87,8 +79,6 @@ function updateRole(employee_id, role_id, cb) {
         if (err) {
 			console.log(err);
 		}
-		console.log(results);
-		// console.log(fields);
 		cb(results);
     });
 }

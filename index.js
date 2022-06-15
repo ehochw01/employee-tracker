@@ -54,7 +54,6 @@ function optionPrompt() {
 /* WHEN I choose to view all departments
 THEN I am presented with a formatted table showing department names and department ids */
 function viewDepartments() {
-    console.log("viewDepartments()");
     api.getDepartments((results) => {
         console.table(results);
         optionPrompt();
@@ -64,7 +63,6 @@ function viewDepartments() {
 /* WHEN I choose to view all roles
 THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role */
 function viewRoles() {
-    console.log("viewRoles()");
     api.getRoles((results) => {
         console.table(results);
         optionPrompt();
@@ -74,7 +72,6 @@ function viewRoles() {
 /* WHEN I choose to view all employees
 THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to */
 function viewEmployees() {
-    console.log("viewEmployees()");
     api.getEmployees((results) => {
         console.table(results);
         optionPrompt();
@@ -84,7 +81,6 @@ function viewEmployees() {
 /* WHEN I choose to add a department
 THEN I am prompted to enter the name of the department and that department is added to the database */
 function addDepartmentInq() {
-    console.log("addDepartmentInq()");
     inquirer
     .prompt([
         /* Pass your questions in here */
@@ -106,9 +102,7 @@ function addDepartmentInq() {
 /* WHEN I choose to add a role
 THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database */
 function addRoleInq() {
-    console.log("addRoleInq()");
     api.getDepartments((results) => {
-        // console.log(results);    
         const depNames = results.map(department => department.name)
         inquirer
         .prompt([
@@ -148,7 +142,6 @@ function addRoleInq() {
 /* WHEN I choose to add an employee
 THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database */
 function addEmployeeInq() {
-    console.log("addEmployeeInq()");
     api.getRoles((roles_results) => {
         const roleNames = roles_results.map(role => role.title);
         api.getEmployees((emp_results) => {
@@ -195,8 +188,6 @@ function addEmployeeInq() {
                         }
                     }
                 }
-                console.log("chosenRole: " + chosenRole);
-                console.log("chosenManager: " + chosenManager);
                 api.addEmployee(data.fn, data.ln, chosenRole, chosenManager, (results) => {
                     optionPrompt();
                 });
@@ -208,7 +199,6 @@ function addEmployeeInq() {
 /* WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database */
 function updateEmployeeRole() {
-    console.log("updateEmployeeRole()");
     api.getEmployees((emp_results) => {
         const emp_names = emp_results.map(employee => employee.Name);
         api.getRoles((roles_results) => {
